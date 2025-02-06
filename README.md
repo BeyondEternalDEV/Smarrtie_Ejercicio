@@ -71,7 +71,6 @@ Para ejecutar este proyecto, necesitarás instalar las siguientes dependencias:
 2. **Interacción con el chatbot**:
 
    - Puedes escribir un mensaje en el campo de texto y presionar **Enter** o hacer clic en el ícono de flecha **"➡"** para enviar el mensaje.
-   - El **placeholder** del campo de texto cambiará a "⚠ Escribe un mensaje antes de enviar" si se intenta enviar un mensaje vacío.
    - El chatbot tiene una configuración de tokens máximos y temperatura que puedes ajustar para personalizar la generación de texto.
 
 3. **Configuraciones**:
