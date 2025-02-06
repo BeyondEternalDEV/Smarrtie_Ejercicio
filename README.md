@@ -48,7 +48,7 @@ Para ejecutar este proyecto, necesitarás instalar las siguientes dependencias:
 
 4. **Configura tus variables de entorno**:
 
-   Asegúrate de tener un archivo `.env` en el directorio raíz del proyecto. Este archivo debe contener tus credenciales o configuraciones necesarias, si es necesario.
+   Asegúrate de tener un archivo `.env` en el directorio raíz del proyecto. Este archivo debe contener el token de acceso a tu Hugging Face.
 
    Ejemplo de archivo `.env`:
 
