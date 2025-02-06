@@ -15,8 +15,8 @@ pipeline = transformers.pipeline(
 
 def chat_function(message, system_prompt, history, max_new_tokens, temperature):
     messages = [
-    {"role": "system", "content": system_prompt},
-    {"role": "user", "content": message}
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": message}
     ]
     prompt = pipeline.tokenizer.apply_chat_template(
         messages,
@@ -29,28 +29,56 @@ def chat_function(message, system_prompt, history, max_new_tokens, temperature):
     ]
     outputs = pipeline(
         prompt,
-        max_new_tokens = max_new_tokens,
-        eos_token_id = terminators,
-        do_sample = True,
-        temperature = temperature + 0.1,
-        top_p = 0.9
+        max_new_tokens=max_new_tokens,
+        eos_token_id=terminators,
+        do_sample=True,
+        temperature=temperature + 0.1,
+        top_p=0.9
     )
-    return outputs[0]["generated_text"][len(prompt):]
+    response = outputs[0]["generated_text"][len(prompt):]
+    history.append((message, response))
+    return history, ""
 
-with gr.Blocks() as demo:
-
+with gr.Blocks(css=".input-container { display: flex; align-items: center; } .send-btn { border: none; background: transparent; cursor: pointer; }") as demo:
     gr.Markdown("# 🤖 Chatbot Smarttie")
-
-    gr.ChatInterface(
-        chat_function,
-        chatbot=gr.Chatbot(height=400),
-        textbox=gr.Textbox(placeholder="Ingresa el mensaje aquí", container=False, scale=7, autofocus=True),
-        additional_inputs=[
-            gr.Textbox("", label = "Indicación del Sistema"),
-            gr.Slider(500, 4000, label= "Tokens máximos"),
-            gr.Slider(0,1, label="Temperatura")
-        ]    
+    chatbot = gr.Chatbot(height=400, label="Historial de Conversación")
+    with gr.Row():
+        with gr.Column(scale=12, min_width=200):
+            with gr.Row(elem_classes="input-container"):
+                user_input = gr.Textbox(
+                    placeholder="💬 Escribe tu mensaje...",
+                    container=True,
+                    show_label=False,
+                    interactive=True,
+                    scale=10,
+                    autofocus= True
+                )
+                send_btn = gr.Button("➡", elem_classes="send-btn", size="sm", variant="primary", scale=1)
+    with gr.Row():
+        system_prompt = gr.Textbox(
+            label="Indicación del Sistema",
+            interactive=True
+        )
+    with gr.Row():
+        max_tokens = gr.Slider(500, 4000, value=1000, label="Tokens máximos", step=50)
+        temperature = gr.Slider(0.0, 1.0, value=0.7, label="Temperatura", step=0.05)
+    with gr.Row():
+        clear_btn = gr.Button("🗑 Limpiar Chat", variant="secondary")
+    user_input.submit(
+        fn=chat_function,
+        inputs=[user_input, system_prompt, chatbot, max_tokens, temperature],
+        outputs=[chatbot, user_input],
+        queue=False
     )
+    send_btn.click(
+        fn=chat_function,
+        inputs=[user_input, system_prompt, chatbot, max_tokens, temperature],
+        outputs=[chatbot, user_input],
+        queue=False
+    )
+    clear_btn.click(lambda: [], inputs=[], outputs=[chatbot])
+demo.launch(share=False)
+
 
 demo.launch(share=True)
 
