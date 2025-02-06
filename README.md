@@ -79,8 +79,6 @@ Para ejecutar este proyecto, necesitarás instalar las siguientes dependencias:
    - **Tokens máximos**: Ajusta la cantidad máxima de tokens generados por respuesta.
    - **Temperatura**: Controla la creatividad de las respuestas (0.0 para respuestas más conservadoras, 1.0 para respuestas más creativas).
 
-4. **Limpiar el chat**:
-   Puedes limpiar el historial de la conversación haciendo clic en el botón **🗑 Limpiar Chat**.
 
 ## Tecnología Utilizada
 
